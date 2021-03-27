@@ -17,6 +17,7 @@ from pytrends.request import TrendReq
 pytrend = TrendReq()
 pd.set_option('display.max_columns', 100)
 import time
+import plotly.graph_objects as go
 
 # from google.colab import auth
 # auth.authenticate_user()
@@ -27,23 +28,270 @@ import time
 # from gspread_dataframe import set_with_dataframe
 
 
-
-
-df = pd.DataFrame({'first column': [1, 2, 3, 4],
-                   'second column': [10, 20, 30, 40]})
-
-
+categories = pd.read_csv(r'C:\Users\Alex\Desktop\python\Streamlit\pytrends_categories.csv') 
 
 
 startTime = time.time()
 pytrend = TrendReq(hl='en-CA', tz=360)
 
-
+geo_code =  [
+['Andorra', 'AN'],
+['United Arab Emirates', 'AE'],
+['Afghanistan', 'AF'],
+['Antigua and Barbuda', 'AC'],
+['Anguilla', 'AV'],
+['Albania', 'AL'],
+['Armenia', 'AM'],
+['Angola', 'AO'],
+['Antarctica', 'AY'],
+['Argentina', 'AR'],
+['American Samoa', 'AQ'],
+['Austria', 'AU'],
+['Australia', 'AS'],
+['Aruba', 'AA'],
+['Azerbaijan', 'AJ'],
+['Bosnia and Herzegovina', 'BK'],
+['Barbados', 'BB'],
+['Bangladesh', 'BG'],
+['Belgium', 'BE'],
+['Burkina Faso', 'UV'],
+['Bulgaria', 'BU'],
+['Bahrain', 'BA'],
+['Burundi', 'BY'],
+['Benin', 'BN'],
+['Saint Barthalemy', 'TB'],
+['Bermuda', 'BD'],
+['Brunei', 'BX'],
+['Bolivia', 'BL'],
+['Brazil', 'BR'],
+['Bahamas', 'BF'],
+['Bhutan', 'BT'],
+['Bouvet Island', 'BV'],
+['Botswana', 'BC'],
+['Belarus', 'BO'],
+['Belize', 'BH'],
+['Canada', 'CA'],
+['Cocos Islands', 'CK'],
+['Democratic Republic of the Congo', 'CG'],
+['Central African Republic', 'CT'],
+['Republic of the Congo', 'CF'],
+['Switzerland', 'SZ'],
+['Ivory Coast', 'IV'],
+['Cook Islands', 'CW'],
+['Chile', 'CI'],
+['Cameroon', 'CM'],
+['China', 'CH'],
+['Colombia', 'CO'],
+['Costa Rica', 'CS'],
+['Cuba', 'CU'],
+['Cape Verde', 'CV'],
+['Curacao', 'UC'],
+['Christmas Island', 'KT'],
+['Cyprus', 'CY'],
+['Czech Republic', 'EZ'],
+['Germany', 'GM'],
+['Djibouti', 'DJ'],
+['Denmark', 'DA'],
+['Dominica', 'DO'],
+['Dominican Republic', 'DR'],
+['Algeria', 'AG'],
+['Ecuador', 'EC'],
+['Estonia', 'EN'],
+['Egypt', 'EG'],
+['Western Sahara', 'WI'],
+['Eritrea', 'ER'],
+['Spain', 'SP'],
+['Ethiopia', 'ET'],
+['Finland', 'FI'],
+['Fiji', 'FJ'],
+['Falkland Islands', 'FK'],
+['Micronesia', 'FM'],
+['Faroe Islands', 'FO'],
+['France', 'FR'],
+['Gabon', 'GB'],
+['United Kingdom', 'UK'],
+['Grenada', 'GJ'],
+['Georgia', 'GG'],
+['French Guiana', 'FG'],
+['Guernsey', 'GK'],
+['Ghana', 'GH'],
+['Gibraltar', 'GI'],
+['Greenland', 'GL'],
+['Gambia', 'GA'],
+['Guinea', 'GV'],
+['Guadeloupe', 'GP'],
+['Equatorial Guinea', 'EK'],
+['Greece', 'GR'],
+['South Georgia and the South Sandwich Islands', 'SX'],
+['Guatemala', 'GT'],
+['Guam', 'GQ'],
+['Guinea-Bissau', 'PU'],
+['Guyana', 'GY'],
+['Hong Kong', 'HK'],
+['Heard Island and McDonald Islands', 'HM'],
+['Honduras', 'HO'],
+['Croatia', 'HR'],
+['Haiti', 'HA'],
+['Hungary', 'HU'],
+['Indonesia', 'ID'],
+['Ireland', 'EI'],
+['Israel', 'IS'],
+['Isle of Man', 'IM'],
+['India', 'IN'],
+['British Indian Ocean Territory', 'IO'],
+['Iraq', 'IZ'],
+['Iran', 'IR'],
+['Iceland', 'IC'],
+['Italy', 'IT'],
+['Jersey', 'JE'],
+['Jamaica', 'JM'],
+['Jordan', 'JO'],
+['Japan', 'JA'],
+['Kenya', 'KE'],
+['Kyrgyzstan', 'KG'],
+['Cambodia', 'CB'],
+['Kiribati', 'KR'],
+['Comoros', 'CN'],
+['Saint Kitts and Nevis', 'SC'],
+['North Korea', 'KN'],
+['South Korea', 'KS'],
+['Kosovo', 'KV'],
+['Kuwait', 'KU'],
+['Cayman Islands', 'CJ'],
+['Kazakhstan', 'KZ'],
+['Laos', 'LA'],
+['Lebanon', 'LE'],
+['Saint Lucia', 'ST'],
+['Liechtenstein', 'LS'],
+['Sri Lanka', 'CE'],
+['Liberia', 'LI'],
+['Lesotho', 'LT'],
+['Lithuania', 'LH'],
+['Luxembourg', 'LU'],
+['Latvia', 'LG'],
+['Libya', 'LY'],
+['Morocco', 'MO'],
+['Monaco', 'MN'],
+['Moldova', 'MD'],
+['Montenegro', 'MJ'],
+['Saint Martin', 'RN'],
+['Madagascar', 'MA'],
+['Marshall Islands', 'RM'],
+['Macedonia', 'MK'],
+['Mali', 'ML'],
+['Myanmar', 'BM'],
+['Mongolia', 'MG'],
+['Macao', 'MC'],
+['Northern Mariana Islands', 'CQ'],
+['Martinique', 'MB'],
+['Mauritania', 'MR'],
+['Montserrat', 'MH'],
+['Malta', 'MT'],
+['Mauritius', 'MP'],
+['Maldives', 'MV'],
+['Malawi', 'MI'],
+['Mexico', 'MX'],
+['Malaysia', 'MY'],
+['Mozambique', 'MZ'],
+['Namibia', 'WA'],
+['New Caledonia', 'NC'],
+['Niger', 'NG'],
+['Norfolk Island', 'NF'],
+['Nigeria', 'NI'],
+['Nicaragua', 'NU'],
+['Netherlands', 'NL'],
+['Norway', 'NO'],
+['Nepal', 'NP'],
+['Nauru', 'NR'],
+['Niue', 'NE'],
+['New Zealand', 'NZ'],
+['Oman', 'MU'],
+['Panama', 'PM'],
+['Peru', 'PE'],
+['French Polynesia', 'FP'],
+['Papua New Guinea', 'PP'],
+['Philippines', 'RP'],
+['Pakistan', 'PK'],
+['Poland', 'PL'],
+['Saint Pierre and Miquelon', 'SB'],
+['Pitcairn', 'PC'],
+['Puerto Rico', 'RQ'],
+['Palestinian Territory', 'WE'],
+['Portugal', 'PO'],
+['Palau', 'PS'],
+['Paraguay', 'PA'],
+['Qatar', 'QA'],
+['Reunion', 'RE'],
+['Romania', 'RO'],
+['Serbia', 'RI'],
+['Russia', 'RS'],
+['Rwanda', 'RW'],
+['Saudi Arabia', 'SA'],
+['Solomon Islands', 'BP'],
+['Seychelles', 'SE'],
+['Sudan', 'SU'],
+['South Sudan', 'OD'],
+['Sweden', 'SW'],
+['Singapore', 'SN'],
+['Saint Helena', 'SH'],
+['Slovenia', 'SI'],
+['Svalbard and Jan Mayen', 'SV'],
+['Slovakia', 'LO'],
+['Sierra Leone', 'SL'],
+['San Marino', 'SM'],
+['Senegal', 'SG'],
+['Somalia', 'SO'],
+['Suriname', 'NS'],
+['Sao Tome and Principe', 'TP'],
+['El Salvador', 'ES'],
+['Sint Maarten', 'NN'],
+['Syria', 'SY'],
+['Swaziland', 'WZ'],
+['Turks and Caicos Islands', 'TK'],
+['Chad', 'CD'],
+['French Southern Territories', 'FS'],
+['Togo', 'TO'],
+['Thailand', 'TH'],
+['Tajikistan', 'TI'],
+['Tokelau', 'TL'],
+['East Timor', 'TT'],
+['Turkmenistan', 'TX'],
+['Tunisia', 'TS'],
+['Tonga', 'TN'],
+['Turkey', 'TU'],
+['Trinidad and Tobago', 'TD'],
+['Tuvalu', 'TV'],
+['Taiwan', 'TW'],
+['Tanzania', 'TZ'],
+['Ukraine', 'UP'],
+['Uganda', 'UG'],
+['United States', 'US'],
+['Uruguay', 'UY'],
+['Uzbekistan', 'UZ'],
+['Vatican', 'VT'],
+['Saint Vincent and the Grenadines', 'VC'],
+['Venezuela', 'VE'],
+['British Virgin Islands', 'VI'],
+['U.S. Virgin Islands', 'VQ'],
+['Vietnam', 'VM'],
+['Vanuatu', 'NH'],
+['Wallis and Futuna', 'WF'],
+['Samoa', 'WS'],
+['Yemen', 'YM'],
+['Mayotte', 'MF'],
+['South Africa', 'SF'],
+['Zambia', 'ZA'],
+['Zimbabwe', 'ZI'],
+['Serbia and Montenegro', 'YI'],
+['Netherlands Antilles', 'NT']
+]
+geo_code = pd.DataFrame(geo_code)
+geo_code.columns = ['Long', 'Short']
 
 competitive_set_recomended = pd.DataFrame({
         'Nintendo': ['Nintendo', 'Blizzard Activision','Sony PlayStation','Xbox','Stadia','Sega'],
-        'Canada': ['Canada', 'United States', 'Mexico','Australia','New Zealand','United Kingdom'],
-        'Alberta': ['Alberta', 'Destination Canada','Travel Ontario','New Zealand','France','Germany'],
+        'Destination Canada': ['Canada', 'United States', 'Mexico','Australia','New Zealand','United Kingdom'],
+        'Travel Alberta': ['Alberta', 'Destination Canada','Travel Ontario','New Zealand','France','Germany'],
         'RBC': ['RBC', 'CIBC','BMO','TD','Scotia Bank','Bank of America'],
         'CBC': ['Nintendo', 'Blizzard Activision','Sony PlayStation','Xbox','Stadia','Sega'],
         'Keurig': ['Keurig','Coffeemate','Nesspresso','Xbox','Stadia','Sega'],
@@ -51,39 +299,90 @@ competitive_set_recomended = pd.DataFrame({
         'Ministry of Finance': ['Nintendo', 'Blizzard Activision','Sony PlayStation','Xbox','Stadia','Sega']
     })
 
-#df = pd.DataFrame(competitive_set)
+
+st.set_page_config(layout="wide")
+col1, col2 = st.beta_columns(2)
+
+
 
 st.sidebar.header("Select your Criteria")  
 option = st.sidebar.selectbox(
     'Search from a curated Competititve Set',
      list(competitive_set_recomended.columns))
-
-start_date = st.sidebar.date_input('Start Date')
-end_date = st.sidebar.date_input('End Date')
+     
+sidebar_col1, sidebar_col2 = st.sidebar.beta_columns(2)
+#start_date = st.sidebar.date_input('Start Date')
+#end_date = st.sidebar.date_input('End Date')
+start_date = sidebar_col1.date_input('Start Date')
+end_date = sidebar_col2.date_input('End Date')
 date_range = str(start_date) + ' ' + str(end_date)
 
-st.image("https://www.amire.com.au/wp-content/uploads/2020/11/1_Fi6masemXJT3Q8YWekQCDQ.png", width=135,)
-# st.header('Google Trends: Interest Overtime')
-st.header(option + ': Interest Overtime')
+option2 = st.sidebar.selectbox('Select a category', categories['Categories'])
 
-# if option == 'Nintendo':
-#   st.subheader(option)
+#st_categories = int(str(categories.loc[categories['Categories'] == st_categories,'ID'].unique))
+option2 = categories.loc[categories['Categories'] == option2,'ID'].iloc[0]
+
+
+
+
+option3 = st.sidebar.selectbox('Select a Geography', geo_code['Long'])
+
+#st_categories = int(str(categories.loc[categories['Categories'] == st_categories,'ID'].unique))
+option3 = geo_code.loc[geo_code['Long'] == option3,'Short'].iloc[0]
+
+
+
+
+
+
+
+
+#https://stackoverflow.com/questions/50916422/python-typeerror-object-of-type-int64-is-not-json-serializable
+# Defining my own encoder to sovle JSON serialization issue when for selecting categories
+import json
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(NpEncoder, self).default(obj)
+
+# Your codes .... 
+option2 = json.dumps(option2, cls=NpEncoder)
+
+
+
+
 
 competitive_set = list(competitive_set_recomended.loc[:,option])
+
+result_cols = list(competitive_set_recomended.columns)
+
+
+multiselect_option = st.multiselect('Select Competitors', 
+                                            competitive_set,
+                                            competitive_set)
+
+
 
 
 
 dataset = []
 
-for x in range(0,len(competitive_set)):
-    keywords = [competitive_set[x]]
+for x in range(0,len(multiselect_option)):
+    keywords = [multiselect_option[x]]
     pytrend.build_payload(
     kw_list=keywords,
     #Select Category
     #https://github.com/pat310/google-trends-api/wiki/Google-Trends-Categories
-    cat=41,
-    timeframe=date_range,
-    geo='CA')
+    #cat=categories.loc[categories['Categories'] == st_categories,'ID'],
+    cat=option2,
+    timeframe=date_range, 
+    geo=option3)
     data = pytrend.interest_over_time()
     if not data.empty:
         data = data.drop(labels=['isPartial'],axis='columns')
@@ -100,6 +399,52 @@ print('Execution time in sec.: ' + str(executionTime))
 print(competitive_set)
 
 
+
+result_csv = result.to_excel('search_trends.xlsx')
+# result2 = result.loc[:, option]
+# st.line_chart(result2)
+#st.line_chart(result, use_container_width=True)
+
+
+col1.header(f"{option}: Interest Overtime prices for {result.index[0].strftime('%B %Y')} - " \
+          +                f"{result.index[-1].strftime('%B %Y')}")
+# https://plotly.com/python/line-charts/
+
+col2.image("https://www.amire.com.au/wp-content/uploads/2020/11/1_Fi6masemXJT3Q8YWekQCDQ.png", width=135,)
+
+
+
+
+
+# instantiate the figure object
+fig = go.Figure(
+    layout=go.Layout(
+        height=1000,
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)'
+    )
+    
+)
+
+
+
+fig.update_xaxes(showline=True, linewidth=2, linecolor='LightGrey')
+fig.update_yaxes(showline=True, linewidth=2, linecolor='LightGrey')
+
+fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey')
+
+for col in result.columns:
+    fig.add_scatter(x=result.index, y=result[col], name=col)
+
+fig.update_layout(
+    uniformtext_minsize=20
+
+
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+
 import os
 import base64
 def get_binary_file_downloader_html(bin_file, file_label='File'):
@@ -109,195 +454,10 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
     href = f'<a href="data:application/octet-stream;base64,{bin_str}" download="{os.path.basename(bin_file)}">Download {file_label}</a>'
     return href
 
-result_csv = result.to_excel('search_trends.xlsx')
-# result2 = result.loc[:, option]
-# st.line_chart(result2)
-st.line_chart(result)
+
 st.markdown(get_binary_file_downloader_html('search_trends.xlsx', 'Data to Excel'), unsafe_allow_html=True)
 if st.checkbox('Show me the Data'):
-    
     st.write(result)
 
-import altair as alt
-
-
-np.random.seed(42)
-source = pd.DataFrame(np.cumsum(np.random.randn(100, 3), 0).round(2),
-                    columns=['A', 'B', 'C'], index=pd.RangeIndex(100, name='x'))
-source = source.reset_index().melt('x', var_name='category', value_name='y')
-
-# Create a selection that chooses the nearest point & selects based on x-value
-nearest = alt.selection(type='single', nearest=True, on='mouseover',
-                        fields=['x'], empty='none')
-
-# The basic line
-line = alt.Chart(source).mark_line(interpolate='basis').encode(
-    x='x:Q',
-    y='y:Q',
-    color='category:N'
-)
-
-# Transparent selectors across the chart. This is what tells us
-# the x-value of the cursor
-selectors = alt.Chart(source).mark_point().encode(
-    x='x:Q',
-    opacity=alt.value(0),
-).add_selection(
-    nearest
-)
-
-# Draw points on the line, and highlight based on selection
-points = line.mark_point().encode(
-    opacity=alt.condition(nearest, alt.value(1), alt.value(0))
-)
-
-# Draw text labels near the points, and highlight based on selection
-text = line.mark_text(align='left', dx=5, dy=-5).encode(
-    text=alt.condition(nearest, 'y:Q', alt.value(' '))
-)
-
-# Draw a rule at the location of the selection
-rules = alt.Chart(source).mark_rule(color='gray').encode(
-    x='x:Q',
-).transform_filter(
-    nearest
-)
-
-# Put the five layers into a chart and bind the data
-alt.layer(
-    line, selectors, points, rules, text
-).properties(
-    width=1500, height=500
-)
-
-
-st.altair_chart(line)
-
-
-# linedata = pd.DataFrame([
-#     recept_list[1000:cycles],,
-#     toneset[1000:cycles],
-#     horizontal,
-# ]).T.rename(columns={0:'a', 1:'b', 2:'c'})
-
-# series = pd.DataFrame({
-#   'year': ['2010', '2011', '2012', '2013','2010', '2011', '2012', '2013'],
-#   'animal': ['antelope', 'antelope', 'antelope', 'antelope', 'velociraptor', 'velociraptor', 'velociraptor', 'velociraptor',],
-#   'count': [8, 6, 3, 1, 2, 4, 5, 5]
-# })
-
-# # Basic Altair line chart where it picks automatically the colors for the lines
-# basic_chart = alt.Chart(series).mark_line().encode(
-#     x='year',
-#     y='count',
-#     color='animal',
-#     # legend=alt.Legend(title='Animals by year')
-# )
-
-# # Custom Altair line chart where you set color and specify dimensions
-# custom_chart = alt.Chart(series).mark_line().encode(
-#     x='year',
-#     y='count',
-#     color=alt.Color('animal',
-#             scale=alt.Scale(
-#                 domain=['antelope', 'velociraptor'],
-#                 range=['blue', 'red'])
-#                 )
-# ).properties(
-#     width=900,
-#     height=500
-# )
-
-# st.altair_chart(basic_chart)
-# st.altair_chart(custom_chart)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# import plotly.graph_objects as go
-
-# import matplotlib.pyplot as plt
-
- 
-# z_data = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv')
-# z = z_data.values
-# sh_0, sh_1 = z.shape
-# x, y = np.linspace(0, 1, sh_0), np.linspace(0, 1, sh_1)
-# fig = go.Figure(data=[go.Surface(z=z, x=x, y=y)])
-# fig.update_layout(title='IRR', autosize=False,
-#                   width=800, height=800,
-#                   margin=dict(l=40, r=40, b=40, t=40))
-# st.plotly_chart(fig)
-
-# Initialize the figure style
-##df = result
-
-# import matplotlib.pyplot as plt
-# import numpy as np
-# import pandas as pd
- 
-# # Make a data frame
-# df=pd.DataFrame({'x': range(1,11), 'y1': np.random.randn(10), 'y2': np.random.randn(10)+range(1,11), 'y3': np.random.randn(10)+range(11,21), 'y4': np.random.randn(10)+range(6,16), 'y5': np.random.randn(10)+range(4,14)+(0,0,0,0,0,0,0,-3,-8,-6), 'y6': np.random.randn(10)+range(2,12), 'y7': np.random.randn(10)+range(5,15), 'y8': np.random.randn(10)+range(4,14), 'y9': np.random.randn(10)+range(4,14) })
- 
-# # Initialize the figure style
-# plt.style.use('seaborn-darkgrid')
- 
-# # create a color palette
-# palette = plt.get_cmap('Set1')
- 
-# # multiple line plot
-# num=0
-# for column in df.drop('x', axis=1):
-#     num+=1
- 
-#     # Find the right spot on the plot
-#     plt.subplot(3,3, num)
- 
-#     # plot every group, but discrete
-#     for v in df.drop('x', axis=1):
-#         plt.plot(df['x'], df[v], marker='', color='grey', linewidth=0.6, alpha=0.3)
- 
-#     # Plot the lineplot
-#     plt.plot(df['x'], df[column], marker='', color=palette(num), linewidth=2.4, alpha=0.9, label=column)
- 
-#     # Same limits for every chart
-#     plt.xlim(0,10)
-#     plt.ylim(-2,22)
- 
-#     # Not ticks everywhere
-#     if num in range(7) :
-#         plt.tick_params(labelbottom='off')
-#     if num not in [1,4,7] :
-#         plt.tick_params(labelleft='off')
- 
-#     # Add title
-#     plt.title(column, loc='left', fontsize=12, fontweight=0, color=palette(num) )
-
-# # general title
-# plt.suptitle("How the 9 students improved\nthese past few days?", fontsize=13, fontweight=0, color='black', style='italic', y=1.02)
- 
-# # Axis titles
-# plt.text(0.5, 0.02, 'Time', ha='center', va='center')
-# plt.text(0.06, 0.5, 'Note', ha='center', va='center', rotation='vertical')
-
-# # Show the graph
-# st.plotly_chart(plt)
 
 
