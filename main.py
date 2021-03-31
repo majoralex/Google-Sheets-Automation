@@ -18,16 +18,9 @@ pytrend = TrendReq()
 pd.set_option('display.max_columns', 100)
 import time
 import plotly.graph_objects as go
+
 import os
 import base64
-
-# from google.colab import auth
-# auth.authenticate_user()
-
-# import gspread
-# from oauth2client.client import GoogleCredentials
-
-# from gspread_dataframe import set_with_dataframe
 
 
 categories = pd.read_csv(r'C:\Users\Alex\Desktop\python\Streamlit\pytrends_categories.csv') 
@@ -353,8 +346,8 @@ class NpEncoder(json.JSONEncoder):
         else:
             return super(NpEncoder, self).default(obj)
 
-# Your codes .... 
 option2 = json.dumps(option2, cls=NpEncoder)
+
 
 
 
@@ -381,7 +374,6 @@ for x in range(0,len(multiselect_option)):
     kw_list=keywords,
     #Select Category
     #https://github.com/pat310/google-trends-api/wiki/Google-Trends-Categories
-    #cat=categories.loc[categories['Categories'] == st_categories,'ID'],
     cat=option2,
     timeframe=date_range, 
     geo=option3)
@@ -403,20 +395,18 @@ print(competitive_set)
 
 
 result_csv = result.to_excel('search_trends.xlsx')
-# result2 = result.loc[:, option]
-# st.line_chart(result2)
-#st.line_chart(result, use_container_width=True)
+
 
 
 col1.header(f"{option}: Interest Overtime prices for {result.index[0].strftime('%B %Y')} - " \
           +                f"{result.index[-1].strftime('%B %Y')}")
-# https://plotly.com/python/line-charts/
 
 col2.image("https://www.amire.com.au/wp-content/uploads/2020/11/1_Fi6masemXJT3Q8YWekQCDQ.png", width=135,)
 
 
 
 
+#import plotly.graph_objects as go
 
 # instantiate the figure object
 fig = go.Figure(
@@ -432,20 +422,26 @@ fig = go.Figure(
 
 fig.update_xaxes(showline=True, linewidth=2, linecolor='LightGrey')
 fig.update_yaxes(showline=True, linewidth=2, linecolor='LightGrey')
-
 fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGrey')
 
+# add a scatter trace for every column
 for col in result.columns:
     fig.add_scatter(x=result.index, y=result[col], name=col)
 
+# change the scale to logarithmic and add title
 fig.update_layout(
     uniformtext_minsize=20
+    #yaxis=dict(type="log"),
+)
 
 
 
 st.plotly_chart(fig, use_container_width=True)
 
 
+
+# import os
+# import base64
 def get_binary_file_downloader_html(bin_file, file_label='File'):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -457,6 +453,4 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
 st.markdown(get_binary_file_downloader_html('search_trends.xlsx', 'Data to Excel'), unsafe_allow_html=True)
 if st.checkbox('Show me the Data'):
     st.write(result)
-
-
 
