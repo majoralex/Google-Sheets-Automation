@@ -12,7 +12,8 @@ import streamlit as st
 # import numpy as np
 import pandas as pd
 import numpy as np
-
+#import datetime as dt
+import datetime as dt
 from pytrends.request import TrendReq
 pytrend = TrendReq()
 pd.set_option('display.max_columns', 100)
@@ -30,6 +31,7 @@ startTime = time.time()
 pytrend = TrendReq(hl='en-CA', tz=360)
 
 geo_code =  [
+['Canada', 'CA'],
 ['Andorra', 'AN'],
 ['United Arab Emirates', 'AE'],
 ['Afghanistan', 'AF'],
@@ -65,7 +67,6 @@ geo_code =  [
 ['Botswana', 'BC'],
 ['Belarus', 'BO'],
 ['Belize', 'BH'],
-['Canada', 'CA'],
 ['Cocos Islands', 'CK'],
 ['Democratic Republic of the Congo', 'CG'],
 ['Central African Republic', 'CT'],
@@ -304,12 +305,18 @@ st.sidebar.header("Select your Criteria")
 option = st.sidebar.selectbox(
     'Search from a curated Competititve Set',
      list(competitive_set_recomended.columns))
-     
+
+
+placeholder_startdate = dt.date.today() - dt.timedelta(30)
+placeholder_end_date = dt.date.today() - dt.timedelta(1)
+
 sidebar_col1, sidebar_col2 = st.sidebar.beta_columns(2)
 #start_date = st.sidebar.date_input('Start Date')
 #end_date = st.sidebar.date_input('End Date')
-start_date = sidebar_col1.date_input('Start Date')
-end_date = sidebar_col2.date_input('End Date')
+start_date = sidebar_col1.date_input('Start Date',
+                                     placeholder_startdate)
+end_date = sidebar_col2.date_input('End Date',
+                                     placeholder_end_date)
 date_range = str(start_date) + ' ' + str(end_date)
 
 option2 = st.sidebar.selectbox('Select a category', categories['Categories'])
@@ -437,7 +444,7 @@ fig.update_layout(
 
 
 st.plotly_chart(fig, use_container_width=True)
-
+#st.altair_chart(line, use_container_width=True)
 
 
 # import os
@@ -453,4 +460,10 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
 st.markdown(get_binary_file_downloader_html('search_trends.xlsx', 'Data to Excel'), unsafe_allow_html=True)
 if st.checkbox('Show me the Data'):
     st.write(result)
+
+
+
+
+
+
 
