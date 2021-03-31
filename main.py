@@ -18,6 +18,8 @@ pytrend = TrendReq()
 pd.set_option('display.max_columns', 100)
 import time
 import plotly.graph_objects as go
+import os
+import base64
 
 # from google.colab import auth
 # auth.authenticate_user()
@@ -444,9 +446,6 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 
-
-import os
-import base64
 def get_binary_file_downloader_html(bin_file, file_label='File'):
     with open(bin_file, 'rb') as f:
         data = f.read()
