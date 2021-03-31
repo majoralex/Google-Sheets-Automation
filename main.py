@@ -24,7 +24,7 @@ import os
 import base64
 
 
-categories = pd.read_csv(r'C:\Users\Alex\Desktop\python\Streamlit\pytrends_categories.csv') 
+categories = pd.read_csv('pytrends_categories.csv') 
 
 
 startTime = time.time()
